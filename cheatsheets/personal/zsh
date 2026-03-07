@@ -42,6 +42,18 @@ Ctrl+W
 # clear screen, keep current command
 Ctrl+L
 
+# ── MAC MINI SSH TUNNELS ─────────────────────────────────────────────────────
+
+# start port forward tunnel (runs in background)
+fwd-openclaw   # localhost:18789 → macmini:18789
+fwd-sumtool    # localhost:8484  → macmini:8484
+fwd-podcat     # localhost:5173  → macmini:5173
+
+# stop a tunnel
+unfwd-openclaw
+unfwd-sumtool
+unfwd-podcat
+
 # ── UTILITIES (oh-my-zsh plugins) ────────────────────────────────────────────
 
 # extract any archive (.zip, .tar.gz, .tgz, .bz2, etc.)

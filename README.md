@@ -12,6 +12,7 @@ Personal configuration files for nvim, tmux, zsh, and cheat.
 | `.p10k.zsh` | Powerlevel10k prompt config |
 | `cheat-conf.yml` | cheat CLI config |
 | `cheatsheets/personal/` | Personal cheatsheets (synced) |
+| `Brewfile` | All Homebrew dependencies |
 | `install.sh` | Bootstrap script |
 
 > `cheatsheets/work/` is local to each machine and not synced.
@@ -41,13 +42,12 @@ cd ~/.dotfiles
 This will:
 - Back up any existing configs to `~/.dotfiles-backup-<timestamp>`
 - Install Oh My Zsh (if not present)
-- Install Powerlevel10k theme (if not present)
-- Install `zsh-autosuggestions` and `zsh-syntax-highlighting` plugins
 - Symlink all configs to their correct locations
 - Clone community cheatsheets
 - Template the cheat config with your home directory path
 - Install TPM (tmux plugin manager) if not present
-- Install CLI tools via Homebrew: `neovim`, `tmux`, `lazygit`, `ripgrep`, `fd`, `fzf`, `cheat`
+- Install all Homebrew dependencies from `Brewfile`: `neovim`, `tmux`, `lazygit`, `ripgrep`, `fd`, `fzf`, `cheat`, `sqlite-rsync`, `powerlevel10k`, `zsh-autosuggestions`, `zsh-syntax-highlighting`
+- Symlink brew-installed zsh plugins into oh-my-zsh custom directory
 - Set up fzf shell bindings (`~/.fzf.zsh`)
 - Reload tmux config if tmux is running
 
@@ -69,6 +69,7 @@ cheat ls
 |---|---|
 | Save a config change | `cd ~/.dotfiles && git add . && git commit -m "update" && git push` |
 | Pull latest on another machine | `cd ~/.dotfiles && git pull && ./install.sh` |
+| Sync nvim plugins after `lazy-lock.json` changes | Open nvim and run `:Lazy update` |
 | Add a new config file | `mv <config> ~/.dotfiles/`, symlink it in `install.sh`, commit |
 
 Every config file is a symlink back into `~/.dotfiles`, so any edit — even from inside nvim — is already tracked in git.

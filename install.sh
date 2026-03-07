@@ -18,16 +18,6 @@ if [ ! -d "$HOME/.oh-my-zsh" ]; then
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 fi
 
-echo "→ Installing Zsh plugins..."
-if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k" ]; then
-  git clone --depth=1 https://github.com/romkatv/powerlevel10k ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-fi
-if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions" ]; then
-  git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-fi
-if [ ! -d "${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting" ]; then
-  git clone https://github.com/zsh-users/zsh-syntax-highlighting ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-fi
 
 echo "→ Backing up existing configs..."
 BACKUP="$HOME/.dotfiles-backup-$(date +%Y%m%d%H%M%S)"
@@ -66,27 +56,19 @@ fi
 
 echo "→ Installing CLI tools via Homebrew..."
 if command -v brew &> /dev/null; then
-  brew_install() {
-    local cmd="$1" pkg="${2:-$1}"
-    if ! command -v "$cmd" &> /dev/null; then
-      echo "  installing $pkg..."
-      brew install "$pkg"
-    fi
-  }
-  brew_install nvim neovim
-  brew_install tmux
-  brew_install lazygit
-  brew_install rg ripgrep
-  brew_install fd
-  brew_install fzf
+  brew bundle --file="$DOTFILES/Brewfile"
+  # Symlink brew-installed zsh plugins into oh-my-zsh custom directory
+  ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+  ln -sf "$(brew --prefix)/share/powerlevel10k" "$ZSH_CUSTOM/themes/powerlevel10k"
+  ln -sf "$(brew --prefix)/share/zsh-autosuggestions" "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+  ln -sf "$(brew --prefix)/share/zsh-syntax-highlighting" "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
   # Install fzf shell bindings (key bindings + completion) non-interactively
   if [ ! -f ~/.fzf.zsh ]; then
     "$(brew --prefix)/opt/fzf/install" --all --no-bash --no-fish
   fi
-  brew_install cheat
 else
   echo "⚠ Homebrew not found — install missing tools manually:"
-  echo "  neovim, tmux, lazygit, ripgrep, fd, fzf, cheat"
+  echo "  neovim, tmux, lazygit, ripgrep, fd, fzf, cheat, sqlite-rsync"
 fi
 
 echo "→ Reloading tmux config (if running)..."

@@ -164,5 +164,16 @@ export PATH="$HOME/.local/bin:$PATH"
 
 # opencode
 export PATH=/Users/andrew/.opencode/bin:$PATH
+# Mac Mini port forwarding tunnels
+fwd-openclaw() { ssh -N -L 18789:127.0.0.1:18789 macmini & }
+fwd-sumtool()  { ssh -N -L 8484:127.0.0.1:8484 macmini & }
+fwd-podcat()   { ssh -N -L 5173:127.0.0.1:5173 macmini & }
+unfwd-openclaw() { kill $(lsof -ti:18789) 2>/dev/null; }
+unfwd-sumtool()  { kill $(lsof -ti:8484) 2>/dev/null; }
+unfwd-podcat()   { kill $(lsof -ti:5173) 2>/dev/null; }
+
 alias dotfiles='/usr/bin/git --git-dir=/Users/andrew/.dotfiles/ --work-tree=/Users/andrew'
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="$(brew --prefix sqlite-rsync)/bin:$PATH"
+
+alias sync-podcat-db='sqlite3_rsync carl@macmini:/Users/carl/.local/share/sumtool/sumtool.db ~/sumtool.db'
